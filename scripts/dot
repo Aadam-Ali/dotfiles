@@ -15,24 +15,17 @@ elif [[ ${OS} == "Darwin" ]] && [[ ! $(which ansible) ]]; then
   brew install -q ansible
 fi
 
-if [[ ! -f "$HOME/.ssh/id_rsa" ]]; then
-  mkdir -p "$HOME/.ssh"
-  ssh-keygen -f "$HOME/.ssh/id_rsa" -N ''
-  echo "========== Add the following key to GitHub (Before Cloning Dotfiles) =========="
-  cat "$HOME/.ssh/id_rsa.pub"
-  echo "==============================================================================="
-  read -r -p "Press enter to continue ..." </dev/tty
-fi
-
 if [[ ! -d "$HOME/Repos/Aadam-Ali/dotfiles" ]]; then
   mkdir -p "$HOME/Repos/Aadam-Ali"
-  git clone git@github.com:Aadam-Ali/dotfiles "$HOME/Repos/Aadam-Ali/dotfiles"
+  git clone https://github.com/Aadam-Ali/dotfiles "$HOME/Repos/Aadam-Ali/dotfiles"
   cd "$HOME/Repos/Aadam-Ali/dotfiles"
+  git checkout testing
 else
   cd "$HOME/Repos/Aadam-Ali/dotfiles"
   git stash -q
   git pull
   git stash pop -q || true
+  git checkout testing
 fi
 
 ln -sf "$PWD/home/.profile" "$HOME/.profile"
